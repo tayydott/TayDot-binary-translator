@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TayDot Binary Translator</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto+Mono:wght@300;500&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0a0a2e;
+            font-family: 'Orbitron', sans-serif;
+            min-height: 100vh;
+            color: #00ff9d;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            perspective: 1000px;
+        }
+
+        .logo {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(45deg, #00ff9d, #00b4ff);
+            margin: 0 auto;
+            border-radius: 50%;
+            animation: float 3s ease-in-out infinite, glow 2s infinite alternate;
+            transform-style: preserve-3d;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            margin: 1rem 0;
+            background: linear-gradient(45deg, #00ff9d, #00b4ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: titleFloat 2s ease-in-out infinite;
+            text-shadow: 0 0 20px rgba(0, 255, 157, 0.3);
+        }
+
+        .translator-box {
+            background: rgba(0, 0, 50, 0.3);
+            backdrop-filter: blur(10px);
+            padding: 2rem;
+            border-radius: 15px;
+            border: 2px solid #00ff9d;
+            transform-style: preserve-3d;
+            transition: transform 0.3s;
+            box-shadow: 0 0 30px rgba(0, 255, 157, 0.2);
+        }
+
+        textarea {
+            width: 100%;
+            height: 150px;
+            margin: 1rem 0;
+            padding: 1rem;
+            background: #000022;
+            border: 1px solid #00ff9d;
+            color: #00ff9d;
+            font-family: 'Roboto Mono', monospace;
+            border-radius: 8px;
+            resize: vertical;
+            transition: all 0.3s;
+        }
+
+        textarea:focus {
+            outline: none;
+            box-shadow: 0 0 20px rgba(0, 255, 157, 0.3);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin: 1rem 0;
+        }
+
+        button {
+            padding: 1rem 2rem;
+            background: linear-gradient(45deg, #00ff9d, #00b4ff);
+            border: none;
+            border-radius: 50px;
+            color: #000;
+            font-family: 'Orbitron', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s;
+            transform-style: preserve-3d;
+        }
+
+        button:hover {
+            transform: translateY(-3px) rotateX(15deg);
+            box-shadow: 0 5px 15px rgba(0, 255, 157, 0.4);
+        }
+
+        .contact-card {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotateY(90deg);
+            background: linear-gradient(45deg, #000022, #000044);
+            padding: 2rem;
+            border-radius: 15px;
+            border: 2px solid #00ff9d;
+            color: #00ff9d;
+            opacity: 0;
+            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            z-index: 1000;
+        }
+
+        .contact-card.active {
+            opacity: 1;
+            transform: translate(-50%, -50%) rotateY(0deg);
+        }
+
+        .contact-card h2 {
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .contact-card p {
+            margin: 0.5rem 0;
+            font-family: 'Roboto Mono', monospace;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+
+        @keyframes titleFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes glow {
+            0% { filter: drop-shadow(0 0 5px #00ff9d); }
+            100% { filter: drop-shadow(0 0 20px #00b4ff); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo"></div>
+            <h1>TayDot Binary Translator</h1>
+        </div>
+
+        <div class="translator-box">
+            <textarea id="input" placeholder="Enter text or binary here..."></textarea>
+            <div class="button-group">
+                <button onclick="encodeBinary()">Encode to Binary</button>
+                <button onclick="decodeBinary()">Decode to Text</button>
+                <button onclick="toggleContact()">Creator</button>
+            </div>
+            <textarea id="output" readonly></textarea>
+        </div>
+    </div>
+
+    <div class="contact-card">
+        <h2>Contact Developer</h2>
+        <p>Name: Alvin Pieterson</p>
+        <p>Social: @TayDot</p>
+        <p>Number: +233533355746</p>
+        <button onclick="window.open('https://wa.me/233533255746', '_blank')" 
+                style="margin-top: 1rem; width: 100%;">
+            Direct Message
+        </button>
+    </div>
+
+    <script>
+        function encodeBinary() {
+            const input = document.getElementById('input').value;
+            const output = document.getElementById('output');
+            output.value = input.split('').map(char => {
+                return char.charCodeAt(0).toString(2).padStart(8, '0');
+            }).join(' ');
+        }
+
+        function decodeBinary() {
+            const input = document.getElementById('input').value;
+            const output = document.getElementById('output');
+            output.value = input.split(' ').map(bin => {
+                return String.fromCharCode(parseInt(bin, 2));
+            }).join('');
+        }
+
+        function toggleContact() {
+            const card = document.querySelector('.contact-card');
+            card.classList.toggle('active');
+        }
+
+        // Add interactive effects
+        document.querySelectorAll('button').forEach(btn => {
+            btn.addEventListener('mousemove', (e) => {
+                const rect = btn.getBoundingClientRect();
+                const x = (e.clientX - rect.left) / btn.offsetWidth;
+                const y = (e.clientY - rect.top) / btn.offsetHeight;
+                
+                btn.style.transform = `perspective(1000px) rotateX(${(0.5 - y) * 15}deg) rotateY(${(x - 0.5) * 15}deg)`;
+            });
+
+            btn.addEventListener('mouseleave', () => {
+                btn.style.transform = 'perspective(1000px) rotateX(0) rotateY(0)';
+            });
+        });
+    </script>
+</body>
+  </html>
