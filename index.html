@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>TayDot Binary Translator</title>
+    <title>TayDot Suite</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto+Mono:wght@300;500&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap');
 
         * {
             margin: 0;
@@ -15,10 +15,10 @@
         }
 
         body {
-            background: #0a0a0a;
-            font-family: 'Orbitron', sans-serif;
+            background: #0f0a1a;
+            font-family: 'Inter', sans-serif;
             height: 100vh;
-            color: #b983ff;
+            color: #e0d6ff;
             overflow: hidden;
             touch-action: none;
         }
@@ -36,29 +36,75 @@
             position: relative;
         }
 
+        .app-menu {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            z-index: 1001;
+        }
+
+        .menu-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #2a1a40;
+            border: none;
+            color: #b083f9;
+            font-size: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .menu-content {
+            display: none;
+            position: absolute;
+            top: 50px;
+            right: 0;
+            background: #1a1126;
+            border-radius: 12px;
+            padding: 0.5rem;
+            width: 200px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            border: 1px solid #3a2950;
+        }
+
+        .menu-item {
+            padding: 0.8rem;
+            border-radius: 8px;
+            color: #d0c2ff;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+
+        .menu-item:hover {
+            background: #2a1a40;
+        }
+
         .logo {
             width: 80px;
             height: 80px;
-            background: linear-gradient(45deg, #2d0052, #5a00b8);
+            background: linear-gradient(45deg, #2a1a40, #3a2950);
             margin: 0 auto;
             border-radius: 15px;
             animation: float 3s ease-in-out infinite;
-            transform-style: preserve-3d;
         }
 
         h1 {
-            font-size: 2rem;
+            font-size: 1.8rem;
             margin: 1rem 0;
-            color: #b983ff;
-            text-shadow: 0 0 10px rgba(185, 131, 255, 0.2);
+            color: #e0d6ff;
+            font-weight: 600;
         }
 
         .translator-box {
-            background: rgba(18, 0, 36, 0.9);
+            background: #1a1126;
             padding: 1rem;
             border-radius: 15px;
-            border: 1px solid #5a00b8;
-            box-shadow: 0 0 10px rgba(90, 0, 184, 0.2);
+            border: 1px solid #3a2950;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
 
         textarea {
@@ -66,13 +112,19 @@
             height: 120px;
             margin: 1rem 0;
             padding: 1rem;
-            background: #1a1a1a;
-            border: 1px solid #5a00b8;
-            color: #b983ff;
-            font-family: 'Roboto Mono', monospace;
-            border-radius: 8px;
+            background: #241a33;
+            border: 1px solid #3a2950;
+            color: #e0d6ff;
+            font-family: 'Inter', sans-serif;
+            border-radius: 12px;
             resize: none;
             transition: all 0.3s;
+            font-size: 0.95rem;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #5a3d7d;
         }
 
         .button-group {
@@ -84,17 +136,17 @@
 
         button {
             padding: 0.8rem;
-            background: linear-gradient(45deg, #2d0052, #5a00b8);
+            background: #2a1a40;
             border: none;
-            border-radius: 8px;
-            color: #b983ff;
-            font-family: 'Orbitron', sans-serif;
+            border-radius: 12px;
+            color: #d0c2ff;
+            font-weight: 500;
             cursor: pointer;
             transition: all 0.3s;
         }
 
         button:active {
-            transform: scale(0.95);
+            transform: scale(0.98);
         }
 
         .creator-btn {
@@ -103,22 +155,24 @@
             left: 1rem;
             right: 1rem;
             width: calc(100% - 2rem);
+            background: #3a2950;
         }
 
         .contact-card {
             position: fixed;
             top: 50%;
             left: 50%;
-            transform: translate(-50%, -50%) scale(0);
-            background: #1a1a1a;
+            transform: translate(-50%, -50%) scale(0.8);
+            background: #1a1126;
             padding: 1.5rem;
             border-radius: 15px;
-            border: 1px solid #5a00b8;
-            color: #b983ff;
+            border: 1px solid #3a2950;
+            color: #e0d6ff;
             opacity: 0;
-            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            transition: all 0.3s ease-out;
             z-index: 1000;
             width: 90%;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.2);
         }
 
         .contact-card.active {
@@ -133,27 +187,27 @@
         }
 
         .history-item {
-            background: #1a1a1a;
-            padding: 0.5rem;
+            background: #241a33;
+            padding: 0.8rem;
             margin: 0.3rem 0;
             border-radius: 8px;
-            border: 1px solid #2d0052;
-            font-size: 0.8rem;
+            border: 1px solid #3a2950;
+            font-size: 0.85rem;
         }
 
         .loader {
             display: none;
-            width: 24px;
-            height: 24px;
-            border: 3px solid #5a00b8;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #5a3d7d;
             border-radius: 50%;
-            border-top-color: #b983ff;
+            border-top-color: #b083f9;
             animation: spin 1s linear infinite;
         }
 
         @keyframes float {
             0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+            50% { transform: translateY(-8px); }
         }
 
         @keyframes spin {
@@ -163,9 +217,20 @@
 </head>
 <body>
     <div class="container">
+        <div class="app-menu">
+            <button class="menu-btn" onclick="toggleMenu()">•••</button>
+            <div class="menu-content" id="menuContent">
+                <div class="menu-item">Language Translator</div>
+                <div class="menu-item">TayDot Watch</div>
+                <div class="menu-item">TayDot Player</div>
+                <div class="menu-item">TayDot Entertainment</div>
+                <div class="menu-item">Settings</div>
+            </div>
+        </div>
+
         <div class="header">
             <div class="logo"></div>
-            <h1>TayDot Binary Translator</h1>
+            <h1>TayDot Suite</h1>
         </div>
 
         <div class="translator-box">
@@ -196,13 +261,20 @@
                 style="margin-top: 1rem; width: 100%;">
             Direct Message
         </button>
-        <button onclick="toggleContact()" style="margin-top: 0.5rem; background: #2d0052;">
+        <button onclick="toggleContact()" style="margin-top: 0.5rem; background: #2a1a40;">
             Close
         </button>
     </div>
 
     <script>
         let history = JSON.parse(localStorage.getItem('binaryHistory')) || [];
+        let menuVisible = false;
+
+        function toggleMenu() {
+            const menu = document.getElementById('menuContent');
+            menuVisible = !menuVisible;
+            menu.style.display = menuVisible ? 'block' : 'none';
+        }
 
         function handleConversion(type) {
             const loader = event.target.querySelector('.loader');
@@ -257,12 +329,15 @@
         function toggleContact() {
             const card = document.querySelector('.contact-card');
             card.classList.toggle('active');
+            if(menuVisible) toggleMenu();
         }
 
-        // Mobile touch prevention
-        document.addEventListener('touchmove', function(e) {
-            e.preventDefault();
-        }, { passive: false });
+        // Close menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if(!e.target.closest('.app-menu') && menuVisible) {
+                toggleMenu();
+            }
+        });
 
         // Initial history load
         updateHistory();
