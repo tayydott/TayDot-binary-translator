@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>TayDot Binary Translator</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto+Mono:wght@300;500&display=swap');
@@ -11,145 +11,153 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
-            background: #0a0a2e;
+            background: #0a0a0a;
             font-family: 'Orbitron', sans-serif;
-            min-height: 100vh;
-            color: #00ff9d;
-            overflow-x: hidden;
+            height: 100vh;
+            color: #b983ff;
+            overflow: hidden;
+            touch-action: none;
         }
 
         .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 2rem;
+            max-width: 100%;
+            height: 100vh;
+            padding: 1rem;
+            position: relative;
         }
 
         .header {
             text-align: center;
-            margin-bottom: 3rem;
-            perspective: 1000px;
+            margin-bottom: 1rem;
+            position: relative;
         }
 
         .logo {
-            width: 120px;
-            height: 120px;
-            background: linear-gradient(45deg, #00ff9d, #00b4ff);
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(45deg, #2d0052, #5a00b8);
             margin: 0 auto;
-            border-radius: 50%;
-            animation: float 3s ease-in-out infinite, glow 2s infinite alternate;
+            border-radius: 15px;
+            animation: float 3s ease-in-out infinite;
             transform-style: preserve-3d;
         }
 
         h1 {
-            font-size: 3.5rem;
+            font-size: 2rem;
             margin: 1rem 0;
-            background: linear-gradient(45deg, #00ff9d, #00b4ff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: titleFloat 2s ease-in-out infinite;
-            text-shadow: 0 0 20px rgba(0, 255, 157, 0.3);
+            color: #b983ff;
+            text-shadow: 0 0 10px rgba(185, 131, 255, 0.2);
         }
 
         .translator-box {
-            background: rgba(0, 0, 50, 0.3);
-            backdrop-filter: blur(10px);
-            padding: 2rem;
+            background: rgba(18, 0, 36, 0.9);
+            padding: 1rem;
             border-radius: 15px;
-            border: 2px solid #00ff9d;
-            transform-style: preserve-3d;
-            transition: transform 0.3s;
-            box-shadow: 0 0 30px rgba(0, 255, 157, 0.2);
+            border: 1px solid #5a00b8;
+            box-shadow: 0 0 10px rgba(90, 0, 184, 0.2);
         }
 
         textarea {
             width: 100%;
-            height: 150px;
+            height: 120px;
             margin: 1rem 0;
             padding: 1rem;
-            background: #000022;
-            border: 1px solid #00ff9d;
-            color: #00ff9d;
+            background: #1a1a1a;
+            border: 1px solid #5a00b8;
+            color: #b983ff;
             font-family: 'Roboto Mono', monospace;
             border-radius: 8px;
-            resize: vertical;
+            resize: none;
             transition: all 0.3s;
-        }
-
-        textarea:focus {
-            outline: none;
-            box-shadow: 0 0 20px rgba(0, 255, 157, 0.3);
         }
 
         .button-group {
             display: flex;
-            gap: 1rem;
-            justify-content: center;
+            flex-direction: column;
+            gap: 0.5rem;
             margin: 1rem 0;
         }
 
         button {
-            padding: 1rem 2rem;
-            background: linear-gradient(45deg, #00ff9d, #00b4ff);
+            padding: 0.8rem;
+            background: linear-gradient(45deg, #2d0052, #5a00b8);
             border: none;
-            border-radius: 50px;
-            color: #000;
+            border-radius: 8px;
+            color: #b983ff;
             font-family: 'Orbitron', sans-serif;
             cursor: pointer;
             transition: all 0.3s;
-            transform-style: preserve-3d;
         }
 
-        button:hover {
-            transform: translateY(-3px) rotateX(15deg);
-            box-shadow: 0 5px 15px rgba(0, 255, 157, 0.4);
+        button:active {
+            transform: scale(0.95);
+        }
+
+        .creator-btn {
+            position: fixed;
+            bottom: 1rem;
+            left: 1rem;
+            right: 1rem;
+            width: calc(100% - 2rem);
         }
 
         .contact-card {
             position: fixed;
             top: 50%;
             left: 50%;
-            transform: translate(-50%, -50%) rotateY(90deg);
-            background: linear-gradient(45deg, #000022, #000044);
-            padding: 2rem;
+            transform: translate(-50%, -50%) scale(0);
+            background: #1a1a1a;
+            padding: 1.5rem;
             border-radius: 15px;
-            border: 2px solid #00ff9d;
-            color: #00ff9d;
+            border: 1px solid #5a00b8;
+            color: #b983ff;
             opacity: 0;
-            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
             z-index: 1000;
+            width: 90%;
         }
 
         .contact-card.active {
             opacity: 1;
-            transform: translate(-50%, -50%) rotateY(0deg);
+            transform: translate(-50%, -50%) scale(1);
         }
 
-        .contact-card h2 {
-            margin-bottom: 1rem;
-            text-align: center;
+        .history-section {
+            margin-top: 1rem;
+            max-height: 150px;
+            overflow-y: auto;
         }
 
-        .contact-card p {
-            margin: 0.5rem 0;
-            font-family: 'Roboto Mono', monospace;
+        .history-item {
+            background: #1a1a1a;
+            padding: 0.5rem;
+            margin: 0.3rem 0;
+            border-radius: 8px;
+            border: 1px solid #2d0052;
+            font-size: 0.8rem;
+        }
+
+        .loader {
+            display: none;
+            width: 24px;
+            height: 24px;
+            border: 3px solid #5a00b8;
+            border-radius: 50%;
+            border-top-color: #b983ff;
+            animation: spin 1s linear infinite;
         }
 
         @keyframes float {
-            0%, 100% { transform: translateY(0) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(5deg); }
-        }
-
-        @keyframes titleFloat {
             0%, 100% { transform: translateY(0); }
             50% { transform: translateY(-10px); }
         }
 
-        @keyframes glow {
-            0% { filter: drop-shadow(0 0 5px #00ff9d); }
-            100% { filter: drop-shadow(0 0 20px #00b4ff); }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
     </style>
 </head>
@@ -161,14 +169,22 @@
         </div>
 
         <div class="translator-box">
-            <textarea id="input" placeholder="Enter text or binary here..."></textarea>
+            <textarea id="input" placeholder="Enter text or binary..."></textarea>
             <div class="button-group">
-                <button onclick="encodeBinary()">Encode to Binary</button>
-                <button onclick="decodeBinary()">Decode to Text</button>
-                <button onclick="toggleContact()">Creator</button>
+                <button onclick="handleConversion('encode')">
+                    <span class="loader"></span>
+                    Encode to Binary
+                </button>
+                <button onclick="handleConversion('decode')">
+                    <span class="loader"></span>
+                    Decode to Text
+                </button>
             </div>
             <textarea id="output" readonly></textarea>
+            <div class="history-section" id="history"></div>
         </div>
+
+        <button class="creator-btn" onclick="toggleContact()">Creator</button>
     </div>
 
     <div class="contact-card">
@@ -180,9 +196,29 @@
                 style="margin-top: 1rem; width: 100%;">
             Direct Message
         </button>
+        <button onclick="toggleContact()" style="margin-top: 0.5rem; background: #2d0052;">
+            Close
+        </button>
     </div>
 
     <script>
+        let history = JSON.parse(localStorage.getItem('binaryHistory')) || [];
+
+        function handleConversion(type) {
+            const loader = event.target.querySelector('.loader');
+            const button = event.target;
+            button.disabled = true;
+            loader.style.display = 'inline-block';
+
+            setTimeout(() => {
+                if(type === 'encode') encodeBinary();
+                else decodeBinary();
+                button.disabled = false;
+                loader.style.display = 'none';
+                updateHistory();
+            }, 500);
+        }
+
         function encodeBinary() {
             const input = document.getElementById('input').value;
             const output = document.getElementById('output');
@@ -199,25 +235,37 @@
             }).join('');
         }
 
+        function updateHistory() {
+            const historySection = document.getElementById('history');
+            history.unshift({
+                input: document.getElementById('input').value,
+                output: document.getElementById('output').value,
+                date: new Date().toLocaleString()
+            });
+            
+            if(history.length > 5) history.pop();
+            localStorage.setItem('binaryHistory', JSON.stringify(history));
+            
+            historySection.innerHTML = history.map(item => `
+                <div class="history-item">
+                    <div>${item.input.substring(0, 20)}...</div>
+                    <div>→ ${item.output.substring(0, 20)}...</div>
+                </div>
+            `).join('');
+        }
+
         function toggleContact() {
             const card = document.querySelector('.contact-card');
             card.classList.toggle('active');
         }
 
-        // Add interactive effects
-        document.querySelectorAll('button').forEach(btn => {
-            btn.addEventListener('mousemove', (e) => {
-                const rect = btn.getBoundingClientRect();
-                const x = (e.clientX - rect.left) / btn.offsetWidth;
-                const y = (e.clientY - rect.top) / btn.offsetHeight;
-                
-                btn.style.transform = `perspective(1000px) rotateX(${(0.5 - y) * 15}deg) rotateY(${(x - 0.5) * 15}deg)`;
-            });
+        // Mobile touch prevention
+        document.addEventListener('touchmove', function(e) {
+            e.preventDefault();
+        }, { passive: false });
 
-            btn.addEventListener('mouseleave', () => {
-                btn.style.transform = 'perspective(1000px) rotateX(0) rotateY(0)';
-            });
-        });
+        // Initial history load
+        updateHistory();
     </script>
 </body>
-  </html>
+</html>
